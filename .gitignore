@@ -1,0 +1,6 @@
+*.egg-info*
+.mypy_cache/*
+.venv/*
+.pytest_cache/*
+*.sublime-workspace
+*.pyc
