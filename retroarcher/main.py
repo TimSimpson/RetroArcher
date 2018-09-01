@@ -39,5 +39,6 @@ def main() -> None:
         f"{result.playlists + result.skipped_playlists} playlists "
         f"({result.skipped_playlists} skipped)"
     )
+    print(f"    Missed {len(result.missing_remaps)} remap(s)")
 
     sys.exit(0)

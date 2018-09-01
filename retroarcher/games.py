@@ -48,7 +48,15 @@ def load(file_path: pathlib.Path) -> GameListLoadOp:
     play_lists: t.Dict[str, t.List[Entry]] = {}
 
     for playlist_name, data in content.items():
-        play_lists[playlist_name] = [Entry(**element) for element in data]
+        play_lists[playlist_name] = [
+            Entry(
+                name=element["name"],
+                rom_path=pathlib.Path(element["rom_path"]),
+                platform_name=element["platform_name"],
+                remap=element.get("remap"),
+            )
+            for element in data
+        ]
 
     directory = pathlib.Path(os.path.dirname(file_path))
 

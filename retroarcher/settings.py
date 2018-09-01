@@ -1,10 +1,7 @@
 import json
-import os
 import pathlib
 
 import typing as t
-
-from . import games
 
 
 class Remap:
@@ -15,7 +12,7 @@ class Remap:
         #: An absolute file path (though the settings file will store it
         #: as a relative file path from the settings file directory) to a
         #: remap file
-        self.file_path = pathlib.Path(file_path)
+        self.file_path = file_path
 
     @classmethod
     def from_json(
@@ -25,7 +22,7 @@ class Remap:
         return Remap(remap_name=remap_name, file_path=file_path)
 
     def to_json(self) -> dict:
-        return {"file_path": self.file_path}
+        return {"file_path": str(self.file_path)}
 
 
 def remap_dict_from_json(
@@ -67,37 +64,41 @@ class Emu:
 
 class Settings:
     def __init__(
-        self, playlists_path: pathlib.Path, platforms: t.Dict[str, Emu]
+        self,
+        playlists_path: pathlib.Path,
+        remaps_path: t.Optional[pathlib.Path],
+        platforms: t.Dict[str, Emu],
     ) -> None:
         self.playlists_path = playlists_path
+        self.remaps_path = remaps_path
         self.platforms = platforms
 
-    def _write(
-        self, pl_name: str, entries: t.List[games.Entry], root_rom_path: pathlib.Path
-    ) -> None:
-        file_path = self.playlists_path / f"{pl_name}.lpl"
-        with open(file_path, "w") as f:
-            for entry in entries:
-                try:
-                    emu = self.platforms[entry.platform_name]
-                except KeyError as ke:
-                    raise KeyError(
-                        f'Could not find platform "{entry.platform_name}" '
-                        f"in entry {entry.to_json()}"
-                    ) from ke
+    # def _write(
+    #     self, pl_name: str, entries: t.List[games.Entry], root_rom_path: pathlib.Path
+    # ) -> None:
+    #     file_path = self.playlists_path / f"{pl_name}.lpl"
+    #     with open(file_path, "w") as f:
+    #         for entry in entries:
+    #             try:
+    #                 emu = self.platforms[entry.platform_name]
+    #             except KeyError as ke:
+    #                 raise KeyError(
+    #                     f'Could not find platform "{entry.platform_name}" '
+    #                     f"in entry {entry.to_json()}"
+    #                 ) from ke
 
-                f.write(os.path.join(root_rom_path, entry.rom_path) + "\n")
-                f.write(entry.name + "\n")
-                f.write(str(emu.lib_path) + "\n")
-                f.write(emu.emu_name + "\n")
-                # Not sure what this is:
-                f.write("\n")
-                # For some reason, the playlist must be written
-                f.write(str(file_path) + "\n")
+    #             f.write(os.path.join(root_rom_path, entry.rom_path) + "\n")
+    #             f.write(entry.name + "\n")
+    #             f.write(str(emu.lib_path) + "\n")
+    #             f.write(emu.emu_name + "\n")
+    #             # Not sure what this is:
+    #             f.write("\n")
+    #             # For some reason, the playlist must be written
+    #             f.write(str(file_path) + "\n")
 
-    def write_playlists(self, game_list: games.GameListLoadOp) -> None:
-        for pl_name, entries in game_list.play_lists.items():
-            self._write(pl_name, entries, game_list.root_path)
+    # def write_playlists(self, game_list: games.GameListLoadOp) -> None:
+    #     for pl_name, entries in game_list.play_lists.items():
+    #         self._write(pl_name, entries, game_list.root_path)
 
 
 def load(file_path: pathlib.Path) -> Settings:
@@ -114,6 +115,12 @@ def load(file_path: pathlib.Path) -> Settings:
         emu = Emu(remaps=remaps, **data)
         platforms[emu.platform_name] = emu
 
+    remaps_path = (
+        None if "remaps_path" not in content else pathlib.Path(content["remaps_path"])
+    )
+
     return Settings(
-        playlists_path=pathlib.Path(content["playlists_path"]), platforms=platforms
+        playlists_path=pathlib.Path(content["playlists_path"]),
+        remaps_path=remaps_path,
+        platforms=platforms,
     )

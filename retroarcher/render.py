@@ -1,5 +1,6 @@
 import os
 import pathlib
+import shutil
 import typing as t
 
 from . import games
@@ -13,6 +14,10 @@ class Result:
         self._errors = 0
         self._playlists = 0
         self._skipped_playlists = 0
+        self._missing_remaps: t.List[games.Entry] = []
+
+    def add_missing_remap(self, entry: games.Entry) -> None:
+        self._missing_remaps.append(entry)
 
     def add_playlist(self) -> None:
         self._playlists += 1
@@ -34,6 +39,10 @@ class Result:
     @property
     def missing_platforms(self) -> t.List[games.Entry]:
         return self._platform_misses
+
+    @property
+    def missing_remaps(self) -> t.List[games.Entry]:
+        return self._missing_remaps
 
     @property
     def playlists(self) -> int:
@@ -87,6 +96,25 @@ class Renderer:
                 f.write(str(file_path) + "\n")
                 self._result.add_success()
                 entry_count_per_playlist += 1
+
+                if entry.remap:
+                    if self._settings.remaps_path is None:
+                        self._result.add_missing_remap(entry)
+                        continue
+
+                    try:
+                        remap = emu.remaps[entry.remap]
+                    except KeyError as ke:
+                        self._result.add_missing_remap(entry)
+                        continue
+
+                    src_file = remap.file_path
+                    dst_file = (
+                        self._settings.remaps_path
+                        / emu.emu_name
+                        / f"{entry.rom_path.stem}.rmp"
+                    )
+                    shutil.copy(src_file, dst_file)
 
         if entry_count_per_playlist == 0:
             os.remove(file_path)
