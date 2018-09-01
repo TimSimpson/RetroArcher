@@ -7,19 +7,61 @@ import typing as t
 from . import games
 
 
+class Remap:
+    def __init__(self, remap_name: str, file_path: pathlib.Path) -> None:
+        #: Name of the remap. This alias will need to match entries in the
+        #: game list.
+        self.name = remap_name
+        #: An absolute file path (though the settings file will store it
+        #: as a relative file path from the settings file directory) to a
+        #: remap file
+        self.file_path = pathlib.Path(file_path)
+
+    @classmethod
+    def from_json(
+        cls, root_path: pathlib.Path, remap_name: str, j_dict: dict
+    ) -> "Remap":
+        file_path = root_path / pathlib.Path(j_dict["file_path"])
+        return Remap(remap_name=remap_name, file_path=file_path)
+
+    def to_json(self) -> dict:
+        return {"file_path": self.file_path}
+
+
+def remap_dict_from_json(
+    root_path: pathlib.Path, j_dict: t.Dict[str, dict]
+) -> t.Dict[str, Remap]:
+    return {
+        remap_name: Remap.from_json(
+            root_path=root_path, remap_name=remap_name, j_dict=data
+        )
+        for remap_name, data in j_dict.items()
+    }
+
+
+def remap_dict_to_json(remaps: t.Dict[str, Remap]) -> dict:
+    return {remap.name: remap.to_json() for name, remap in remaps.items()}
+
+
 class Emu:
     def __init__(
-        self, platform_name: str, emu_name: str, lib_path: pathlib.Path
+        self,
+        platform_name: str,
+        emu_name: str,
+        lib_path: pathlib.Path,
+        remaps: t.Dict[str, Remap],
     ) -> None:
         self.platform_name = platform_name
         self.emu_name = emu_name
         self.lib_path = lib_path
+        self.remaps = remaps
 
     def to_json(self) -> dict:
         return {
             "platform_name": self.platform_name,
             "emu_name": self.emu_name,
             "lib_path": self.lib_path,
+            "remaps": remap_dict_to_json(self.remaps),
         }
 
 
@@ -63,10 +105,13 @@ def load(file_path: pathlib.Path) -> Settings:
     with open(file_path, "r") as f:
         content = json.loads(f.read())
 
+    file_path_directory = file_path.parent
+
     platforms: t.Dict[str, Emu] = {}
 
     for data in content["platforms"]:
-        emu = Emu(**data)
+        remaps = remap_dict_from_json(file_path_directory, data.pop("remaps", {}))
+        emu = Emu(remaps=remaps, **data)
         platforms[emu.platform_name] = emu
 
     return Settings(

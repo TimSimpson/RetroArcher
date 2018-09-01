@@ -6,15 +6,29 @@ import typing as t
 
 
 class Entry:
-    def __init__(self, name: str, rom_path: pathlib.Path, platform_name: str) -> None:
+    def __init__(
+        self,
+        name: str,
+        rom_path: pathlib.Path,
+        platform_name: str,
+        remap: t.Optional[str] = None,
+    ) -> None:
+        #: The name of the game as it appears in the menu
         self.name = name
+        #: The relative path to the ROM file
         self.rom_path = rom_path
+        #: Name of the platform - this is an alias which is expected to
+        #: be matched up with a `platform_name` given in the settings file.
         self.platform_name = platform_name
+        #: Name of a `remap`. Again, remaps are defined in settings files.
+        #: They are unique to each emulator.
+        self.remap = remap
 
     def to_json(self) -> dict:
         return {
             "name": self.name,
             "platform_name": self.platform_name,
+            "remap": self.remap,
             "rom_path": self.rom_path,
         }
 
