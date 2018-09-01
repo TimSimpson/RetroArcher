@@ -17,6 +17,18 @@ def main() -> None:
         required=True,
     )
     parser.add_argument("--games", help="List of games.", required=True)
+    parser.add_argument(
+        "--show-missing-platforms",
+        help="Print out everytime an entry in the game list refers to a "
+        "platform not in the settings file",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--show-missing-remaps",
+        help="Print out a warning everytime an entry in the game list "
+        "refers to a remap that is not specified in the settings file",
+        action="store_true",
+    )
     args = parser.parse_args()
 
     s = settings.load(pathlib.Path(args.settings))
@@ -24,9 +36,15 @@ def main() -> None:
 
     result = render.Renderer(s, g).run()
 
-    for entry in result.missing_platforms:
-        print(f'Could not find platform "{entry.platform_name}" for:')
-        print(textwrap.indent(json.dumps(entry.to_json(), indent=4), "    "))
+    if args.show_missing_platforms:
+        for entry in result.missing_platforms:
+            print(f'Could not find platform "{entry.platform_name}" for:')
+            print(textwrap.indent(json.dumps(entry.to_json(), indent=4), "    "))
+
+    if args.show_missing_remaps:
+        for entry in result.missing_platforms:
+            print(f'Could not find platform "{entry.platform_name}" for:')
+            print(textwrap.indent(json.dumps(entry.to_json(), indent=4), "    "))
 
     print("Summary:")
     print(
