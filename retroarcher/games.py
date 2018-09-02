@@ -29,7 +29,7 @@ class Entry:
             "name": self.name,
             "platform_name": self.platform_name,
             "remap": self.remap,
-            "rom_path": self.rom_path,
+            "rom_path": str(self.rom_path),
         }
 
 

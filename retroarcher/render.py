@@ -109,6 +109,8 @@ class Renderer:
                         continue
 
                     src_file = remap.file_path
+                    dst_dir = self._settings.remaps_path / emu.emu_name
+                    os.makedirs(dst_dir, exist_ok=True)
                     dst_file = (
                         self._settings.remaps_path
                         / emu.emu_name
