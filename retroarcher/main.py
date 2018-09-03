@@ -60,3 +60,7 @@ def main() -> None:
     print(f"    Missed {len(result.missing_remaps)} remap(s)")
 
     sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
