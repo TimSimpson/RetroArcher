@@ -116,11 +116,13 @@ def load(file_path: pathlib.Path) -> Settings:
         platforms[emu.platform_name] = emu
 
     remaps_path = (
-        None if "remaps_path" not in content else pathlib.Path(content["remaps_path"])
+        None
+        if "remaps_path" not in content
+        else pathlib.Path(content["remaps_path"]).expanduser()
     )
 
     return Settings(
-        playlists_path=pathlib.Path(content["playlists_path"]),
+        playlists_path=pathlib.Path(content["playlists_path"]).expanduser(),
         remaps_path=remaps_path,
         platforms=platforms,
     )

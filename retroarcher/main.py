@@ -31,8 +31,8 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    s = settings.load(pathlib.Path(args.settings))
-    g = games.load(pathlib.Path(args.games))
+    s = settings.load(pathlib.Path(args.settings).expanduser())
+    g = games.load(pathlib.Path(args.games).expanduser())
 
     result = render.Renderer(s, g).run()
 

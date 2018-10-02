@@ -1,5 +1,4 @@
 import json
-import os.path
 import pathlib
 
 import typing as t
@@ -58,6 +57,6 @@ def load(file_path: pathlib.Path) -> GameListLoadOp:
             for element in data
         ]
 
-    directory = pathlib.Path(os.path.dirname(file_path))
+    directory = file_path.parent
 
     return GameListLoadOp(directory, play_lists)
