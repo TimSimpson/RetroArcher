@@ -111,7 +111,9 @@ def load(file_path: pathlib.Path) -> Settings:
     platforms: t.Dict[str, Emu] = {}
 
     for data in content["platforms"]:
-        remaps = remap_dict_from_json(file_path_directory, data.pop("remaps", {}))
+        remaps = remap_dict_from_json(
+            file_path_directory, data.pop("remaps", {})
+        )
         emu = Emu(remaps=remaps, **data)
         platforms[emu.platform_name] = emu
 

@@ -39,12 +39,16 @@ def main() -> None:
     if args.show_missing_platforms:
         for entry in result.missing_platforms:
             print(f'Could not find platform "{entry.platform_name}" for:')
-            print(textwrap.indent(json.dumps(entry.to_json(), indent=4), "    "))
+            print(
+                textwrap.indent(json.dumps(entry.to_json(), indent=4), "    ")
+            )
 
     if args.show_missing_remaps:
         for entry in result.missing_remaps:
             print(f'Could not find remap "{entry.remap}" for:')
-            print(textwrap.indent(json.dumps(entry.to_json(), indent=4), "    "))
+            print(
+                textwrap.indent(json.dumps(entry.to_json(), indent=4), "    ")
+            )
 
     print("Summary:")
     print(

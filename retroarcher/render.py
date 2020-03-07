@@ -68,12 +68,17 @@ class Renderer:
         self._result = Result()
 
         for pl_name, entries in self._game_list_load_op.play_lists.items():
-            self._write_playlist(pl_name, entries, self._game_list_load_op.root_path)
+            self._write_playlist(
+                pl_name, entries, self._game_list_load_op.root_path
+            )
 
         return self._result
 
     def _write_playlist(
-        self, pl_name: str, entries: t.List[games.Entry], root_rom_path: pathlib.Path
+        self,
+        pl_name: str,
+        entries: t.List[games.Entry],
+        root_rom_path: pathlib.Path,
     ) -> None:
         file_path = self._settings.playlists_path / f"{pl_name}.lpl"
 
