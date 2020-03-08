@@ -1,0 +1,32 @@
+{
+    "playlists_path": "{retroarch_home}/playlists",
+    "remaps_path": "{retroarch_home}/config/remaps",
+    "platforms": [
+        {
+            "platform_name": "gb",
+            "emu_name": "Gambatte",
+            "lib_path": "/usr/lib/x86_64-linux-gnu/libretro/gambatte_libretro.so",
+            "remaps": {
+                    "ergo": {
+                    "file_path": "ergo.rmp"
+                },
+                "rpg": {
+                    "file_path": "rpg.rmp"
+                }
+            }
+        },
+        {
+            "platform_name": "nes",
+            "emu_name": "Nestopia",
+            "lib_path": "C:/RetroArch/cores/nestopia_libretro.dll",
+            "remaps": {
+                "ergo": {
+                    "file_path": "ergo.rmp"
+                },
+                "rpg": {
+                    "file_path": "rpg.rmp"
+                }
+            }
+        }
+    ]
+}

@@ -44,7 +44,8 @@ requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
 
 [tool.taskipy.tasks]
-black = "black retroarcher"
-flake8 = "flake8 retroarcher"
-mypy = "mypy retroarcher"
-checks = "task black && task flake8 && task mypy"
+black = "black retroarcher tests"
+flake8 = "flake8 retroarcher tests"
+mypy = "mypy retroarcher tests"
+tests = "pytest -vv -x"
+checks = "task black && task flake8 && task mypy && task tests"

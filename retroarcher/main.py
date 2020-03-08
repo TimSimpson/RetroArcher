@@ -29,7 +29,7 @@ def main() -> None:
         "refers to a remap that is not specified in the settings file",
         action="store_true",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(sys.argv)
 
     s = settings.load(pathlib.Path(args.settings).expanduser())
     g = games.load(pathlib.Path(args.games).expanduser())

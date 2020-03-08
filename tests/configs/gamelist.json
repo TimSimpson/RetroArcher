@@ -1,0 +1,24 @@
+{
+    "Gameboy": [
+        {
+            "name": "Dry Mouth",
+            "platform_name": "gb",
+            "rom_path": "GB/DryMouth.gb",
+            "remap": "rpg"
+        }
+    ],
+    "NES Games": [
+        {
+            "name": "Streemerz-v02",
+            "platform_name": "nes",
+            "rom_path": "NES/streemerz-v02.nes",
+            "remap": "ergo"
+        },
+        {
+            "name": "Guadia Quest",
+            "platform_name": "nes",
+            "rom_path": "NES/guardia.nes",
+            "remap": "rpg"
+        }
+    ]
+}
