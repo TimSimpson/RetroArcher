@@ -6,12 +6,12 @@ RetroArch is cool, but configuring it is basically a never ending Hell (IMO plea
 
 RetroArcher uses two types of JSON files for configuration:
 
-* A file for RetroArch configs, ie which core to use for which system, and stuff like that.
-* A game lists file which is turned into a play list.
+* A file for defining RetroArch configurations on the computer you're currently using. This has info such as the path to the various playlists files, which cores you prefer to use for each system, and stuff like that.
+* A list of all games which can be transformed into a RetroArch play list. If you have a shared library of games this file can also be the same between machines.
 
-Example:
+You then invoke it like this:
 
-    pipenv run retroarcher --games ~/games/games.json --settings ~/retroarcher-settings/laptop/settings.json
+    poetry run retroarcher --games ~/games/games.json --settings ~/retroarcher-settings/laptop/settings.json
 
 ## Settings File
 
@@ -103,17 +103,16 @@ input_player5_analog_dpad_mode = "0"
 ```
 
 
-## Devin'
+## Developing and running tests
 
-This uses pipenv.
+This uses [poetry](https://python-poetry.org/).
 
-Install that, then run this:
+Install that, then run this to execute all the tests:
 
-    pipenv install --dev
-    pipenv run retroarcher <args>
+    poetry run task checks
 
-Test it with:
+Run it with this:
 
-    pipenv run retroarcher-tests
+    poetry run retroarcher
 
 If you use Sublime Text there's a project file which works on both Linux and Windows.
