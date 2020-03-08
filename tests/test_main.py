@@ -30,7 +30,7 @@ def cli(capsys: t.Any, monkeypatch: t.Any) -> CliFunc:
         pass
 
     def cli(args: t.List[str]) -> CliOutput:
-        monkeypatch.setattr(sys, "argv", args)
+        monkeypatch.setattr(sys, "argv", ["retroarcher"] + args)
         output = CliOutput()
 
         def get_code(code: int) -> None:
