@@ -1,5 +1,11 @@
 # RetroArcher
 
+[![Travis Build Status](https://travis-ci.org/TimSimpson/retroarcher.svg?branch=master)](https://travis-ci.org/TimSimpson/retroarcher)
+[![Build status](https://ci.appveyor.com/api/projects/status/vqcmfp6sflj902o7/branch/master?svg=true)](https://ci.appveyor.com/project/TimSimpson/retroarcher/branch/master)
+[ ![Download](https://img.shields.io/pypi/v/retroarcher.svg) ](https://pypi.org/project/retroarcher/)
+
+https://img.shields.io/pypi/v/retroarcher.svg
+
 RetroArch is cool, but configuring it is basically a never ending Hell (IMO please don't send hate mail). This helps configure RetroArch for you.
 
 ## Usage
