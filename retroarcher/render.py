@@ -87,7 +87,7 @@ class Renderer:
             for entry in entries:
                 try:
                     emu = self._settings.platforms[entry.platform_name]
-                except KeyError as ke:
+                except KeyError:
                     self._result.add_missing_platform(entry)
                     continue
 
@@ -109,7 +109,7 @@ class Renderer:
 
                     try:
                         remap = emu.remaps[entry.remap]
-                    except KeyError as ke:
+                    except KeyError:
                         self._result.add_missing_remap(entry)
                         continue
 
