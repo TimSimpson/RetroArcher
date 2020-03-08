@@ -223,3 +223,18 @@ class TestBadArgs:
         assert 0 != actual.exit_code
         assert "usage" in actual.output
         assert "the following arguments are required" in actual.output
+
+    @staticmethod
+    def test_cwith_no_settings(cli: CliFunc) -> None:
+        actual = cli(["--games", str(TEST_CONFIGS / "gamelist.json")])
+        assert 0 != actual.exit_code
+        assert "usage" in actual.output
+        assert "the following arguments are required" in actual.output
+
+    @staticmethod
+    def test_cwith_no_games(temp_dir: pathlib.Path, cli: CliFunc) -> None:
+        _copy_fake_configs(temp_dir)
+        actual = cli(["--settings", str(temp_dir / "mycomputer-settings.json")])
+        assert 0 != actual.exit_code
+        assert "usage" in actual.output
+        assert "the following arguments are required" in actual.output
