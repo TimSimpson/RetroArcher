@@ -16,9 +16,10 @@ class Remap:
 
     @classmethod
     def from_json(
-        cls, root_path: pathlib.Path, remap_name: str, j_dict: dict
+        cls, root_path: pathlib.Path, controller: str, remap_name: str, j_dict: dict
     ) -> "Remap":
-        file_path = root_path / pathlib.Path(j_dict["file_path"])
+        file_path = root_path / controller / pathlib.Path(j_dict["file_path"])
+        print(file_path)
         return Remap(remap_name=remap_name, file_path=file_path)
 
     def to_json(self) -> dict:
@@ -26,11 +27,11 @@ class Remap:
 
 
 def remap_dict_from_json(
-    root_path: pathlib.Path, j_dict: t.Dict[str, dict]
+    root_path: pathlib.Path, controller: str, j_dict: t.Dict[str, dict]
 ) -> t.Dict[str, Remap]:
     return {
         remap_name: Remap.from_json(
-            root_path=root_path, remap_name=remap_name, j_dict=data
+            root_path=root_path, controller=controller, remap_name=remap_name, j_dict=data
         )
         for remap_name, data in j_dict.items()
     }
@@ -101,7 +102,7 @@ class Settings:
     #         self._write(pl_name, entries, game_list.root_path)
 
 
-def load(file_path: pathlib.Path) -> Settings:
+def load(file_path: pathlib.Path, controller: str) -> Settings:
     """Loads a settings file, returning the platforms."""
     with open(file_path, "r") as f:
         content = json.loads(f.read())
@@ -112,7 +113,7 @@ def load(file_path: pathlib.Path) -> Settings:
 
     for data in content["platforms"]:
         remaps = remap_dict_from_json(
-            file_path_directory, data.pop("remaps", {})
+            file_path_directory, controller, data.pop("remaps", {})
         )
         emu = Emu(remaps=remaps, **data)
         platforms[emu.platform_name] = emu

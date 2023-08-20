@@ -29,9 +29,14 @@ def main() -> None:
         "refers to a remap that is not specified in the settings file",
         action="store_true",
     )
+    parser.add_argument(
+        "--controller",
+        help='If set, changes the $CONTROLLER variable in remap paths. Defaults to "xinput".',
+        default="xinput")
+
     args = parser.parse_args(sys.argv[1:])
 
-    s = settings.load(pathlib.Path(args.settings).expanduser())
+    s = settings.load(pathlib.Path(args.settings).expanduser(), args.controller)
     g = games.load(pathlib.Path(args.games).expanduser())
 
     result = render.Renderer(s, g).run()
